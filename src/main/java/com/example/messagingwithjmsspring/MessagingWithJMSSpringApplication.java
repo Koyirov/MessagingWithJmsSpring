@@ -1,6 +1,7 @@
 package com.example.messagingwithjmsspring;
 
 import jakarta.jms.ConnectionFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
@@ -16,11 +17,11 @@ import org.springframework.jms.support.converter.MessageType;
 
 @SpringBootApplication
 @EnableJms
-public class MessagingWithJmsSpringApplication {
+public class MessagingWithJMSSpringApplication {
 
 	@Bean
-	public JmsListenerContainerFactory<?> myFactory(ConnectionFactory connectionFactory,
-													DefaultJmsListenerContainerFactoryConfigurer configurer) {
+	public JmsListenerContainerFactory<?> myFactory(@Qualifier("jmsConnectionFactory") ConnectionFactory connectionFactory,
+                                                    DefaultJmsListenerContainerFactoryConfigurer configurer) {
 		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
 		// This provides all auto-configured defaults to this factory, including the message converter
 		configurer.configure(factory, connectionFactory);
@@ -39,7 +40,7 @@ public class MessagingWithJmsSpringApplication {
 	public static void main(String[] args) {
 
 		// Launch the application
-		ConfigurableApplicationContext context = SpringApplication.run(MessagingWithJmsSpringApplication.class, args);
+		ConfigurableApplicationContext context = SpringApplication.run(MessagingWithJMSSpringApplication.class, args);
 
 		JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
 
